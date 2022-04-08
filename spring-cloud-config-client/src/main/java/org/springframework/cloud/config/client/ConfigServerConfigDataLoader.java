@@ -179,8 +179,10 @@ public class ConfigServerConfigDataLoader implements ConfigDataLoader<ConfigServ
 		}
 		catch (HttpServerErrorException e) {
 			error = e;
-			if (MediaType.APPLICATION_JSON.includes(e.getResponseHeaders().getContentType())) {
-				errorBody = e.getResponseBodyAsString();
+			if (e != null && e.getResponseHeaders() != null) {
+				if (MediaType.APPLICATION_JSON.includes(e.getResponseHeaders().getContentType())) {
+					errorBody = e.getResponseBodyAsString();
+				}
 			}
 		}
 		catch (Exception e) {

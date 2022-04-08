@@ -56,18 +56,19 @@ abstract class AbstractCipherResourceEncryptor implements ResourceEncryptor {
 	protected String decryptWithJacksonParser(String text, String name, String[] profiles, JsonFactory factory)
 			throws IOException {
 		Set<String> valsToDecrpyt = new HashSet<String>();
-		JsonParser parser = factory.createParser(text);
-		JsonToken token;
+		try (JsonParser parser = factory.createParser(text)) {
+			JsonToken token;
 
-		while ((token = parser.nextToken()) != null) {
-			if (token.equals(JsonToken.VALUE_STRING) && parser.getValueAsString().startsWith(CIPHER_MARKER)) {
-				valsToDecrpyt.add(parser.getValueAsString().trim());
+			while ((token = parser.nextToken()) != null) {
+				if (token.equals(JsonToken.VALUE_STRING) && parser.getValueAsString().startsWith(CIPHER_MARKER)) {
+					valsToDecrpyt.add(parser.getValueAsString().trim());
+				}
 			}
-		}
 
-		for (String value : valsToDecrpyt) {
-			String decryptedValue = decryptValue(value.replace(CIPHER_MARKER, ""), name, profiles);
-			text = text.replace(value, decryptedValue);
+			for (String value : valsToDecrpyt) {
+				String decryptedValue = decryptValue(value.replace(CIPHER_MARKER, ""), name, profiles);
+				text = text.replace(value, decryptedValue);
+			}
 		}
 
 		return text;

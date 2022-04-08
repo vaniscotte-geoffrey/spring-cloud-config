@@ -308,7 +308,10 @@ public class JGitEnvironmentRepository extends AbstractScmEnvironmentRepository
 			tryMerge(git, label);
 
 			// always return what is currently HEAD as the version
-			return git.getRepository().findRef("HEAD").getObjectId().getName();
+			if (git.getRepository().findRef("HEAD") != null && git.getRepository().findRef("HEAD").getObjectId() != null) {
+				return git.getRepository().findRef("HEAD").getObjectId().getName();
+			}
+			return "";
 		}
 		catch (RefNotFoundException e) {
 			throw new NoSuchLabelException("No such label: " + label, e);

@@ -94,11 +94,13 @@ public class VaultEnvironmentEncryptor implements EnvironmentEncryptor {
 						VaultResponse vaultResponse = loadedVaultKeys.get(vaultKey);
 
 						if (vaultResponse == null || (vaultResponse.getData() == null
-								|| !vaultResponse.getData().containsKey(vaultParamName))) {
+								|| ( vaultResponse.getData() != null && !vaultResponse.getData().containsKey(vaultParamName)))) {
 							value = null;
 						}
 						else {
-							value = vaultResponse.getData().get(vaultParamName).toString();
+							if (vaultResponse.getData() != null) {
+								value = vaultResponse.getData().get(vaultParamName).toString();
+							}
 						}
 					}
 					catch (Exception e) {
