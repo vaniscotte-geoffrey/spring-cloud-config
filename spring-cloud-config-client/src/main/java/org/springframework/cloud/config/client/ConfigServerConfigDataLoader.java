@@ -179,7 +179,7 @@ public class ConfigServerConfigDataLoader implements ConfigDataLoader<ConfigServ
 		}
 		catch (HttpServerErrorException e) {
 			error = e;
-			if (e != null && e.getResponseHeaders() != null) {
+			if (e != null && e.getResponseHeaders() != null && e.getResponseHeaders().getContentType() != null) {
 				if (MediaType.APPLICATION_JSON.includes(e.getResponseHeaders().getContentType())) {
 					errorBody = e.getResponseBodyAsString();
 				}

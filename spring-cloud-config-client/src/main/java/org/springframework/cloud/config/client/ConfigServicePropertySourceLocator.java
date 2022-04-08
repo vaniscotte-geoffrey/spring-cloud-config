@@ -138,7 +138,7 @@ public class ConfigServicePropertySourceLocator implements PropertySourceLocator
 		}
 		catch (HttpServerErrorException e) {
 			error = e;
-			if (MediaType.APPLICATION_JSON.includes(e.getResponseHeaders().getContentType())) {
+			if (e.getResponseHeaders().getContentType() != null && MediaType.APPLICATION_JSON.includes(e.getResponseHeaders().getContentType())) {
 				errorBody = e.getResponseBodyAsString();
 			}
 		}
