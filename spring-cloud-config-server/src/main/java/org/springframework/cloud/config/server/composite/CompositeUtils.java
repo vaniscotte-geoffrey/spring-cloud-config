@@ -77,7 +77,8 @@ public final class CompositeUtils {
 		MethodMetadata methodMetadata = (MethodMetadata) beanFactory.getBeanDefinition(factoryName).getSource();
 		Class<?> factoryClass = null;
 		try {
-			factoryClass = Class.forName(methodMetadata.getReturnTypeName());
+			if (methodMetadata.getReturnTypeName() != null)
+				factoryClass = Class.forName(methodMetadata.getReturnTypeName());
 		}
 		catch (ClassNotFoundException e) {
 			throw new IllegalStateException(e);

@@ -62,7 +62,7 @@ public class EncryptionController {
 
 	private String defaultProfile = "default";
 
-	public EncryptionController(TextEncryptorLocator encryptorLocator) {
+	public synchronized EncryptionController(TextEncryptorLocator encryptorLocator) {
 		this.encryptorLocator = encryptorLocator;
 	}
 
@@ -101,7 +101,7 @@ public class EncryptionController {
 	}
 
 	@PostMapping("/encrypt/{name}/{profiles}")
-	public String encrypt(@PathVariable String name, @PathVariable String profiles, @RequestBody String data,
+	public synchronized String encrypt(@PathVariable String name, @PathVariable String profiles, @RequestBody String data,
 			@RequestHeader("Content-Type") MediaType type) {
 		TextEncryptor encryptor = getEncryptor(name, profiles, "");
 		validateEncryptionWeakness(encryptor);
@@ -137,7 +137,7 @@ public class EncryptionController {
 		}
 	}
 
-	private TextEncryptor getEncryptor(String name, String profiles, String data) {
+	private synchronized TextEncryptor getEncryptor(String name, String profiles, String data) {
 		if (encryptorLocator == null) {
 			throw new KeyNotInstalledException();
 		}
