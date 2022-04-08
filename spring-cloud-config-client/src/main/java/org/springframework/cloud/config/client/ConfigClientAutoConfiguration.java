@@ -53,8 +53,8 @@ public class ConfigClientAutoConfiguration {
 				ConfigClientProperties.class).length > 0) {
 			return BeanFactoryUtils.beanOfTypeIncludingAncestors(context.getParent(), ConfigClientProperties.class);
 		}
-		ConfigClientProperties client = new ConfigClientProperties(environment);
-		return client;
+		return new ConfigClientProperties(environment);
+
 	}
 
 	@Configuration(proxyBeanMethods = false)
@@ -94,9 +94,7 @@ public class ConfigClientAutoConfiguration {
 		@Override
 		public void onApplicationEvent(ApplicationStartedEvent event) {
 			try {
-				ConfigClientFailFastException exception = event.getApplicationContext()
-						.getBean(ConfigClientFailFastException.class);
-				throw exception;
+				throw event.getApplicationContext().getBean(ConfigClientFailFastException.class);
 			}
 			catch (NoSuchBeanDefinitionException e) {
 				// ignore

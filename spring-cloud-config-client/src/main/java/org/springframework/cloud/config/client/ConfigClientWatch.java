@@ -35,8 +35,6 @@ import static org.springframework.util.StringUtils.hasText;
  */
 public class ConfigClientWatch implements Closeable, EnvironmentAware {
 
-	private static Log log = LogFactory.getLog(ConfigServicePropertySourceLocator.class);
-
 	private final AtomicBoolean running = new AtomicBoolean(false);
 
 	private final ContextRefresher refresher;

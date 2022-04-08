@@ -54,10 +54,7 @@ public class ConfigServerConfigDataMissingEnvironmentPostProcessor extends Confi
 				true);
 		boolean importCheckEnabled = environment.getProperty(ConfigClientProperties.PREFIX + ".import-check.enabled",
 				Boolean.class, true);
-		if (!configEnabled || !importCheckEnabled) {
-			return false;
-		}
-		return true;
+		return configEnabled && importCheckEnabled;
 	}
 
 	static class ImportExceptionFailureAnalyzer extends AbstractFailureAnalyzer<ImportException> {
@@ -71,10 +68,10 @@ public class ConfigServerConfigDataMissingEnvironmentPostProcessor extends Confi
 			else {
 				description = "No spring.config.import property has been defined";
 			}
-			String action = "Add a spring.config.import=configserver: property to your configuration.\n"
-					+ "\tIf configuration is not required add spring.config.import=optional:configserver: instead.\n"
-					+ "\tTo disable this check, set spring.cloud.config.enabled=false or \n"
-					+ "\tspring.cloud.config.import-check.enabled=false.";
+			String action = """Add a spring.config.import=configserver: property to your configuration.\n
+					\tIf configuration is not required add spring.config.import=optional:configserver: instead.\n
+					\tTo disable this check, set spring.cloud.config.enabled=false or \n
+					\tspring.cloud.config.import-check.enabled=false.""";
 			return new FailureAnalysis(description, action, cause);
 		}
 
