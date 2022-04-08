@@ -106,26 +106,30 @@ public class ConfigServerConfigDataLocationResolver
 				}
 			}
 			if (StringUtils.hasText(paramStr)) {
-				Properties properties = StringUtils
-						.splitArrayElementsIntoProperties(StringUtils.delimitedListToStringArray(paramStr, "&"), "=");
-				if (properties != null) {
-					PropertyMapper map = PropertyMapper.get().alwaysApplyingWhenNonNull();
-					map.from(() -> properties.getProperty("fail-fast")).as(Boolean::valueOf)
-							.to(configClientProperties::setFailFast);
-					map.from(() -> properties.getProperty("max-attempts")).as(Integer::valueOf)
-							.to(holder.retryProperties::setMaxAttempts);
-					map.from(() -> properties.getProperty("max-interval")).as(Long::valueOf)
-							.to(holder.retryProperties::setMaxInterval);
-					map.from(() -> properties.getProperty("multiplier")).as(Double::valueOf)
-							.to(holder.retryProperties::setMultiplier);
-					map.from(() -> properties.getProperty("initial-interval")).as(Long::valueOf)
-							.to(holder.retryProperties::setInitialInterval);
-				}
+				setData(paramStr, holder, configClientProperties);
 			}
 			configClientProperties.setUri(uri);
-		}
+
 
 		return holder;
+	}
+
+	private void setData(String paramStr, PropertyHolder holder, ConfigClientProperties configClientProperties) {
+		Properties properties = StringUtils
+			.splitArrayElementsIntoProperties(StringUtils.delimitedListToStringArray(paramStr, "&"), "=");
+		if (properties != null) {
+			PropertyMapper map = PropertyMapper.get().alwaysApplyingWhenNonNull();
+			map.from(() -> properties.getProperty("fail-fast")).as(Boolean::valueOf)
+				.to(configClientProperties::setFailFast);
+			map.from(() -> properties.getProperty("max-attempts")).as(Integer::valueOf)
+				.to(holder.retryProperties::setMaxAttempts);
+			map.from(() -> properties.getProperty("max-interval")).as(Long::valueOf)
+				.to(holder.retryProperties::setMaxInterval);
+			map.from(() -> properties.getProperty("multiplier")).as(Double::valueOf)
+				.to(holder.retryProperties::setMultiplier);
+			map.from(() -> properties.getProperty("initial-interval")).as(Long::valueOf)
+				.to(holder.retryProperties::setInitialInterval);
+		}
 	}
 
 	private BindHandler getBindHandler(ConfigDataLocationResolverContext context) {

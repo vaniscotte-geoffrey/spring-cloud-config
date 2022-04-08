@@ -324,19 +324,19 @@ public class ConfigClientProperties {
 		if (index < 0 || index >= noOfUrl) {
 			throw new IllegalStateException("Trying to access an invalid array index");
 		}
-		String uri = this.uri[index];
-		result.uri = uri;
+		String currentUri = this.uri[index];
+		result.uri = currentUri;
 		Credentials explicitCredentials = getUsernamePassword();
 		result.username = explicitCredentials.username;
 		result.password = explicitCredentials.password;
 		try {
-			URL url = new URL(uri);
+			URL url = new URL(currentUri);
 			String userInfo = url.getUserInfo();
 			// no credentials in url, return explicit credentials
-			if (StringUtils.isEmpty(userInfo) || ":".equals(userInfo)) {
+			if (userInfo == null || userInfo.equals("") || ":".equals(userInfo)) {
 				return result;
 			}
-			String bare = UriComponentsBuilder.fromHttpUrl(uri).userInfo(null).build().toUriString();
+			String bare = UriComponentsBuilder.fromHttpUrl(currentUri).userInfo(null).build().toUriString();
 			result.uri = bare;
 
 			// if userInfo does not contain a :, then append a : to it
@@ -365,7 +365,7 @@ public class ConfigClientProperties {
 			return result;
 		}
 		catch (MalformedURLException | UnsupportedEncodingException e) {
-			throw new IllegalStateException("Invalid URL: " + uri, e);
+			throw new IllegalStateException("Invalid URL: " + currentUri, e);
 		}
 	}
 
