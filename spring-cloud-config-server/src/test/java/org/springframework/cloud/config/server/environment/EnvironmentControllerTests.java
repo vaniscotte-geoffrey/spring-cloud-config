@@ -538,7 +538,7 @@ class EnvironmentControllerTests {
 		assertThatThrownBy(() -> this.controller.labelled("foo%23", "bar", "mylabel"))
 				.isInstanceOf(InvalidEnvironmentRequestException.class);
 	}
-
+	@Nested
 	abstract class MockMvcTestCases {
 
 		protected MockMvc mvc;
